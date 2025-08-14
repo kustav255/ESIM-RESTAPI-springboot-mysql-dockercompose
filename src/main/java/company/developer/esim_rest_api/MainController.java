@@ -29,7 +29,7 @@ public class MainController {
         return deviceRepository.findAll();
     }
 
-    @GetMapping(path="/id/{id}")
+    @GetMapping(path="/{id}")
     public @ResponseBody Optional<Device> getDeviceById(@PathVariable Integer id) {
         return deviceRepository.findById(id);
     }
@@ -44,15 +44,16 @@ public class MainController {
         return deviceRepository.findByState(state);
     }
 
-
-    @PatchMapping(path="/id/{id}")
-    public @ResponseBody String updateDevice(@PathVariable Integer id, @RequestBody Device device) {
+    @PutMapping(path="/{id}")
+    public @ResponseBody String updateDevice(@PathVariable Integer id, @RequestParam String name, @RequestParam String brand) {
         // Check if device exists
         Optional<Device> d = deviceRepository.findById(id);
         if(d.isPresent()){
             // Check state before update
             if(!d.get().getState().equals(STATE.INUSE)){
-               deviceRepository.save(device);
+                d.get().setName(name);
+                d.get().setBrand(brand);
+                deviceRepository.save(d.get());
                 return "Updated";
             }
             return "Not updated. Device in-use";
@@ -60,7 +61,40 @@ public class MainController {
         return "Device ID not found";
     }
 
-    @DeleteMapping(path="/id/{id}")
+    @PatchMapping(path="/{id}/state/inuse")
+    public @ResponseBody String updateDeviceStateToInUse(@PathVariable Integer id) {
+        Optional<Device> d = deviceRepository.findById(id);
+        if (d.isPresent()){
+            d.get().setState(STATE.INUSE);
+            deviceRepository.save(d.get());
+            return "Device state updated to in-use";
+        }
+        return "Device ID not found";
+    }
+
+    @PatchMapping(path="/{id}/state/available")
+    public @ResponseBody String updateDeviceStateToAvailable(@PathVariable Integer id) {
+        Optional<Device> d = deviceRepository.findById(id);
+        if (d.isPresent()){
+            d.get().setState(STATE.AVAILABLE);
+            deviceRepository.save(d.get());
+            return "Device state updated to available";
+        }
+        return "Device ID not found";
+    }
+
+    @PatchMapping(path="/{id}/state/inactive")
+    public @ResponseBody String updateDeviceStateToInactive(@PathVariable Integer id) {
+        Optional<Device> d = deviceRepository.findById(id);
+        if (d.isPresent()){
+            d.get().setState(STATE.INACTIVE);
+            deviceRepository.save(d.get());
+            return "Device state updated to inactive";
+        }
+        return "Device ID not found";
+    }
+
+    @DeleteMapping(path="/{id}")
     public @ResponseBody String deleteDevice(@PathVariable Integer id) {
         Optional<Device> d = deviceRepository.findById(id);
         if(d.isPresent()) {
@@ -73,6 +107,4 @@ public class MainController {
         }
         return "Device ID not found";
     }
-
-
 }
