@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Entity
 public class Device {
@@ -14,7 +17,12 @@ public class Device {
 
     private String name;
 
-    private String email;
+    private String brand;
+
+    private STATE state;
+
+    @CreationTimestamp
+    private Instant creationTime;
 
     public Integer getId() {
         return id;
@@ -32,12 +40,27 @@ public class Device {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
+    public STATE getState() {
+        return state;
+    }
+
+    public void setState(STATE state) {
+        this.state = state;
+    }
+
+    public Instant getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Instant creationTime) {
+        this.creationTime = creationTime;
+    }
 }
