@@ -1,14 +1,15 @@
 # ESIM-RESTAPI-springboot-mysql-dockercompose
 API REST Project, developed with SpringBoot, MySQL and DockerCompose
 
-Build:
+Build Maven:
 ```
 ./mvnw clean install
 ```
 
-Start Docker Compose
+Docker Compose Build and Run
 ```
-docker compose up
+docker compose build
+docker compose up -V
 ```
 
 Link to Swagger:
