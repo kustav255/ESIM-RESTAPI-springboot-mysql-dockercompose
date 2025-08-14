@@ -6,16 +6,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping(path="/devices")
 public class MainController {
 
     @Autowired
     private DeviceRepository deviceRepository;
 
-    @PostMapping(path="/add") // Map ONLY POST Requests
-    public @ResponseBody String addNewDevice(@RequestParam String name
-            , @RequestParam String brand) {
+    @GetMapping
+    public @ResponseBody Iterable<Device> getAllDevices(
+        @RequestParam(required = false) String brand,
+        @RequestParam(required = false) STATE state) {
+
+        // If brand is provided, filter by brand
+        if (brand != null) {
+            return deviceRepository.findByBrandContainingIgnoreCase(brand);
+        }
+        // If state is provided, filter by state
+        else if (state != null) {
+            return deviceRepository.findByState(state);
+        }
+        // If no filters are provided, return all devices
+        return deviceRepository.findAll();
+    }
+
+    @PostMapping
+    public @ResponseBody String addNewDevice(
+            @RequestParam String name,
+            @RequestParam String brand) {
+
         Device n = new Device();
         n.setName(name);
         n.setBrand(brand);
@@ -24,35 +43,38 @@ public class MainController {
         return "Saved";
     }
 
-    @GetMapping(path="/")
-    public @ResponseBody Iterable<Device> getAllDevices() {
-        return deviceRepository.findAll();
-    }
-
     @GetMapping(path="/{id}")
     public @ResponseBody Optional<Device> getDeviceById(@PathVariable Integer id) {
         return deviceRepository.findById(id);
     }
 
-    @GetMapping(path="/brand/{brand}")
-    public @ResponseBody Iterable<Device> getDevicesByBrand(@PathVariable String brand) {
-        return deviceRepository.findByBrandContainingIgnoreCase(brand);
-    }
-
-    @GetMapping(path="/state/{state}")
-    public @ResponseBody Iterable<Device> getDevicesByBrand(@PathVariable STATE state) {
-        return deviceRepository.findByState(state);
-    }
-
     @PutMapping(path="/{id}")
-    public @ResponseBody String updateDevice(@PathVariable Integer id, @RequestParam String name, @RequestParam String brand) {
+    public @ResponseBody String updateDevice(
+            @PathVariable Integer id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand) {
+
+        // If both name and brand are null, return the message below
+        if(name == null && brand == null){
+            return "No fields to update";
+        }
+
         // Check if device exists
         Optional<Device> d = deviceRepository.findById(id);
         if(d.isPresent()){
+
             // Check state before update
             if(!d.get().getState().equals(STATE.INUSE)){
-                d.get().setName(name);
-                d.get().setBrand(brand);
+
+                // Update only the fields that are not null
+                if (name != null) {
+                    d.get().setName(name);
+                }
+                if (brand != null) {
+                    d.get().setBrand(brand);
+                }
+
+                // Save the updated device
                 deviceRepository.save(d.get());
                 return "Updated";
             }
@@ -61,35 +83,18 @@ public class MainController {
         return "Device ID not found";
     }
 
-    @PatchMapping(path="/{id}/state/inuse")
-    public @ResponseBody String updateDeviceStateToInUse(@PathVariable Integer id) {
-        Optional<Device> d = deviceRepository.findById(id);
-        if (d.isPresent()){
-            d.get().setState(STATE.INUSE);
-            deviceRepository.save(d.get());
-            return "Device state updated to in-use";
-        }
-        return "Device ID not found";
-    }
+    // Update device state by ENUM
+    @PatchMapping("/{id}")
+    public @ResponseBody String updateDeviceState(
+        @PathVariable Integer id,
+        @RequestParam STATE state) {
 
-    @PatchMapping(path="/{id}/state/available")
-    public @ResponseBody String updateDeviceStateToAvailable(@PathVariable Integer id) {
+        // Check if device exists and update its state
         Optional<Device> d = deviceRepository.findById(id);
-        if (d.isPresent()){
-            d.get().setState(STATE.AVAILABLE);
+        if (d.isPresent()) {
+            d.get().setState(state);
             deviceRepository.save(d.get());
-            return "Device state updated to available";
-        }
-        return "Device ID not found";
-    }
-
-    @PatchMapping(path="/{id}/state/inactive")
-    public @ResponseBody String updateDeviceStateToInactive(@PathVariable Integer id) {
-        Optional<Device> d = deviceRepository.findById(id);
-        if (d.isPresent()){
-            d.get().setState(STATE.INACTIVE);
-            deviceRepository.save(d.get());
-            return "Device state updated to inactive";
+            return "Device state updated";
         }
         return "Device ID not found";
     }
@@ -98,7 +103,8 @@ public class MainController {
     public @ResponseBody String deleteDevice(@PathVariable Integer id) {
         Optional<Device> d = deviceRepository.findById(id);
         if(d.isPresent()) {
-            // Check state before update
+            // Check state before delete
+            // Only delete if the device is not in use
             if (!d.get().getState().equals(STATE.INUSE)) {
                 deviceRepository.deleteById(id);
                 return "Deleted";
