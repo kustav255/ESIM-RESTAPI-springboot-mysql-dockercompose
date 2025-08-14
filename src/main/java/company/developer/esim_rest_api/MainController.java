@@ -17,12 +17,17 @@ public class MainController {
     @Autowired
     private DeviceRepository deviceRepository;
 
+    // Swagger documentation for the API endpoints (it will repeat over the code)
     @Operation(
             summary = "Get all devices",
             description = "Returns a list of all devices. Optionally filter by brand or state."
     )
+    // Swagger documentation for the API Responses (it will repeat over the code)
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "List of devices returned successfully")
+            @ApiResponse(responseCode = "200", description = "List of devices returned successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Device.class,
+                            example = "[{\"id\":1,\"name\":\"iPhone 14\",\"brand\":\"Apple\",\"state\":\"AVAILABLE\"},{\"id\":2,\"name\":\"Galaxy S23\",\"brand\":\"Samsung\",\"state\":\"INUSE\"}]"
+                    )))
     })
     @GetMapping
     public @ResponseBody ResponseEntity<Iterable<Device>> getAllDevices(
@@ -46,7 +51,9 @@ public class MainController {
             description = "Creates a new device with the given name and brand. State is set to AVAILABLE by default."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Device created successfully")
+            @ApiResponse(responseCode = "201", description = "Device created successfully",
+                    content = @Content(mediaType = "text/plain", schema = @Schema(example = "Saved")
+            ))
     })
     @PostMapping
     public @ResponseBody ResponseEntity<String> addNewDevice(
@@ -66,7 +73,11 @@ public class MainController {
             description = "Returns a device by its unique ID."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Device found"),
+            @ApiResponse(responseCode = "200", description = "Device found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Device.class,
+                            example = "{\"id\":1,\"name\":\"iPhone 14\",\"brand\":\"Apple\",\"state\":\"AVAILABLE\"}"
+                    )
+            )),
             @ApiResponse(responseCode = "404", description = "Device not found", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Not Found")))
     })
     @GetMapping(path="/{id}")
@@ -82,10 +93,10 @@ public class MainController {
             description = "Updates the name and/or brand of a device by ID. Only allowed if device is not in use."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Device updated"),
-            @ApiResponse(responseCode = "400", description = "No fields to update"),
-            @ApiResponse(responseCode = "404", description = "Device not found"),
-            @ApiResponse(responseCode = "409", description = "Device in use, cannot update")
+            @ApiResponse(responseCode = "200", description = "Device updated", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Updated"))),
+            @ApiResponse(responseCode = "400", description = "No fields to update", content = @Content(mediaType = "text/plain", schema = @Schema(example = "No fields to update"))),
+            @ApiResponse(responseCode = "404", description = "Device not found", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Not Found"))),
+            @ApiResponse(responseCode = "409", description = "Device in use, cannot update",  content = @Content(mediaType = "text/plain", schema = @Schema(example = "Not updated. Device in-use")))
     })
     @PutMapping(path="/{id}")
     public @ResponseBody ResponseEntity<String> updateDevice(
@@ -118,8 +129,8 @@ public class MainController {
             description = "Updates the state of a device (AVAILABLE, INUSE, INACTIVE) by ID."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Device state updated"),
-            @ApiResponse(responseCode = "404", description = "Device not found")
+            @ApiResponse(responseCode = "200", description = "Device state updated", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Device state updated to: AVAILABLE"))),
+            @ApiResponse(responseCode = "404", description = "Device not found", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Not Found")))
     })
     // Update device state by ENUM
     @PatchMapping("/{id}")
@@ -141,9 +152,9 @@ public class MainController {
             description = "Deletes a device by its ID. Only allowed if device is not in use."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Device deleted"),
-            @ApiResponse(responseCode = "404", description = "Device not found"),
-            @ApiResponse(responseCode = "409", description = "Device in use, cannot delete")
+            @ApiResponse(responseCode = "200", description = "Device deleted", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Deleted"))),
+            @ApiResponse(responseCode = "404", description = "Device not found", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Not Found"))),
+            @ApiResponse(responseCode = "409", description = "Device in use, cannot delete", content = @Content(mediaType = "text/plain", schema = @Schema(example = "Not deleted. Device in-use")))
     })
     @DeleteMapping(path="/{id}")
     public @ResponseBody ResponseEntity<String> deleteDevice(
