@@ -25,6 +25,8 @@ http://localhost:8080/swagger-ui/index.html
 
 ![img.png](img.png)
 
+The Swagger have some detail on the API Endpoints, their functions, params, and expected responses
+
 
 ------
 Future Improvements - Testing:
