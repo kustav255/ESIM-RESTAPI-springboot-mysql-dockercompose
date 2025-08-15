@@ -1,7 +1,13 @@
 # ESIM-RESTAPI-springboot-mysql-dockercompose
 API REST Project, developed with SpringBoot, MySQL and DockerCompose
 
-To use this project, you will need docker (and docker compose)
+To use this project, you will need JDK 24 and docker (and docker compose)
+
+Start cloning the repo:
+```
+git clone https://github.com/kustav255/ESIM-RESTAPI-springboot-mysql-dockercompose.git
+cd ESIM-RESTAPI-springboot-mysql-dockercompose/
+```
 
 Build Maven:
 ```
