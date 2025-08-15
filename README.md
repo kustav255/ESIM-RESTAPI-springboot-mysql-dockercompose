@@ -75,5 +75,5 @@ Future Improvements - Testing:
  - Integrate the project with a Dynamic Testing Tool, which would send HTTP Requests to the REST API Endpoints while the application is running
    
 /*
-PS: My Git Email and Git Username wasn't properly configured in my git binary (i was using hidden@mail.com as email), and for some reason github understood it as someone else profile called stefan-koehler, but in fact it was me. (i needed to properly setup the tools prior to this challenge, like the github credentials)
+PS: My Git Email and Git Username wasn't properly configured in my git binary (i was using hidden@mail.com as email), and for some reason, github understood it as someone else profile called stefan-koehler, but in fact it was me. (i needed to properly setup the tools prior to this challenge, and made this "mistake" with my email credential)
 */
