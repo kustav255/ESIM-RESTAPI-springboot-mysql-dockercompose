@@ -23,6 +23,9 @@ docker compose down -v
 Link to Swagger:
 http://localhost:8080/swagger-ui/index.html
 
+![img.png](img.png)
+
+
 ------
 Future Improvements - Testing:
  - Remove the Mock, and start using the real DeviceRepository with an in-memory database like H2.
