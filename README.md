@@ -31,24 +31,42 @@ We are using the HTTP Methods and URL patterns as below:
 
 - GET /devices/{id}
   - Get device by ID
+  - Params: ID
 
 - PUT /devices/{id}
   - Update device name and/or brand using params (Not possible to do if device state is "in-use")
+  - Params: ID, name (optional), brand (optional)
 
 - DELETE /devices/{id}
   - Delete device by ID (Not possible to do if device state is "in-use")
+  - Params: ID
 
 - PATCH /devices/{id}
   - Update device state using params
+  - Params: ID, state
 
 - GET /devices
   - Get all devices
-
+  - Params: brand (optional), state (optional)
+    
 - POST /devices
   - Add a new device using params
+  - Params: name, brand
 
 
 ------
+Future Improvements - Security:
+ - Use libraries to avoid tempering with the data sent
+ - Sanitize all input sources (avoiding to be used in malicious ways)
+ - Implement SCA, SAST and DAST tools with GitHub Actions (CI/CD)
+ - Remove all HardCoded Credentials 
+
+Future Improvements - Code/Performance:
+ - Create a Service class, separating the logic from the controller, making it easier to read and maintain
+ - Implement a Code Documentation Tool. It would be easier to understand the code, without depending to much on the API Documentation used by Swagger
+ - Optimize queries as necessary
+ - Implement Cache Tools
+
 Future Improvements - Testing:
  - Remove the Mock, and start using the real DeviceRepository with an in-memory database like H2.
  - Add more tests for edge cases and error handling.
