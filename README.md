@@ -29,29 +29,23 @@ The Swagger have some detail on the API Endpoints, their functions, params, and 
 
 We are using the HTTP Methods and URL patterns as below:
 
-GET
-/devices/{id}
-Get device by ID
+- GET /devices/{id}
+  - Get device by ID
 
-PUT
-/devices/{id}
-Update device name and/or brand (Not possible to do if device state is "in-use")
+- PUT /devices/{id}
+  - Update device name and/or brand using params (Not possible to do if device state is "in-use")
 
-DELETE
-/devices/{id}
-Delete device by ID (Not possible to do if device state is "in-use")
+- DELETE /devices/{id}
+  - Delete device by ID (Not possible to do if device state is "in-use")
 
-PATCH
-/devices/{id}
-Update device state
+- PATCH /devices/{id}
+  - Update device state using params
 
-GET
-/devices
-Get all devices
+- GET /devices
+  - Get all devices
 
-POST
-/devices
-Add a new device
+- POST /devices
+  - Add a new device using params
 
 
 ------
