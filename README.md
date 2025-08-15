@@ -31,5 +31,5 @@ Future Improvements - Testing:
  - Use SonarQube in every deploy with GitHub Actions (CI/CD)
  */
 
-PS: git email and git username wasn't properly configured in my git binary (i was using hidden@mail.com as email), and for some reason github understood it as someone else profile called stefan-koehler, but in fact it was me (i needed to properly setup the tools prior to this challenge, like the github credentials)
+PS: My git email and git username wasn't properly configured in my git binary (i was using hidden@mail.com as email), and for some reason github understood it as someone else profile called stefan-koehler, but in fact it was me (i needed to properly setup the tools prior to this challenge, like the github credentials)
 
